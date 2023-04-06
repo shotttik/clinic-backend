@@ -4,9 +4,17 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 Migrations/
-WebApplication1/Resources/Images/
-WebApplication1/Resources/Images/Thumbnails/
-WebApplication1/Resources/Documents/*.pdf
+
+clinic/Resources/*.jpg
+clinic/Resources/*.jpeg 
+clinic/Resources/*.jfif 
+clinic/Resources/*.pjpeg 
+clinic/Resources/*.pjp 
+clinic/Resources/*.png 
+clinic/Resources/*.svg 
+clinic/Resources/*.webp
+clinic/Resources/*.pdf
+
 bin/
 # User-specific files
 *.rsuser
