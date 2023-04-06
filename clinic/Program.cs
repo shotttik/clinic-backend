@@ -1,9 +1,12 @@
+using System.Text;
 using clinic;
 using clinic.Services;
 using clinic.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +22,19 @@ builder.Services.AddDbContext<DataContext>(options =>
 ConfigurationHelper.Initialize(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value!)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IMailService, MailService>();
 
@@ -34,6 +50,16 @@ builder.Services.AddCors(options =>
                           });
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsAdmin", policy =>
+    {
+        policy.RequireRole("1");
+        policy.RequireClaim("IsAdmin", "True");
+        policy.Build();
+    }
+          );
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,4 @@
-﻿using clinic.Models;
+﻿using clinic.Schemas;
 using clinic.Settings;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -30,7 +30,6 @@ namespace clinic.Services
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
-            Console.WriteLine("sent successfully.");
             smtp.Disconnect(true);
         }
 

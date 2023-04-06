@@ -1,4 +1,4 @@
-﻿using clinic.Models;
+﻿using clinic.Schemas;
 
 namespace clinic.Services
 {
