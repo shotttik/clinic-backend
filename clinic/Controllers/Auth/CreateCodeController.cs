@@ -1,6 +1,7 @@
 ﻿using clinic.Models;
 using clinic.Schemas;
 using clinic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,8 @@ using WebApplication1.Data;
 
 namespace clinic.Controllers.Auth
 {
+    [Route("/[controller]")]
+    [ApiController]
     public class CreateCodeController :Controller
     {   
         private readonly IMailService _mailService;

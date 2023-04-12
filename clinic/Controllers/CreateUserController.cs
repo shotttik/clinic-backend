@@ -1,31 +1,26 @@
 ﻿using System.Security.Cryptography;
-using AutoMapper;
 using clinic.Models;
 using clinic.Schemas;
-using clinic.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace clinic.Controllers.Auth
+namespace clinic.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    public class RegistrationController :Controller
+    [Authorize(Policy = "IsAdmin")]
+    public class CreateUserController : Controller
     {
-        private readonly IMailService _mailService;
         private readonly DataContext _dataContext;
-        public RegistrationController(DataContext dataContext, IMailService mailService) 
+        public CreateUserController(DataContext dataContext)
         {
-           _dataContext = dataContext;
-           _mailService = mailService;
+            _dataContext = dataContext;
         }
-       
-        [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest request)
+
+        [HttpPost("createUser")]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -39,11 +34,10 @@ namespace clinic.Controllers.Auth
                 }
                 return BadRequest(errors);
             }
-            if (_dataContext.Users.Any(u=>u.Email == request.Email || u.Pid == request.Pid))
+            if (await _dataContext.Users.AnyAsync(u => u.Email == request.Email || u.Pid == request.Pid))
             {
-                return BadRequest("მომხმარებელი უკვე რეგისტრირებულია.");
+                return BadRequest("ექიმი უკვე რეგისტრირებულია.");
             }
-
             CreatePasswordHash(request.Password, out byte [] passwordHash, out byte [] passwordSalt);
             var user = new User
             {
@@ -53,22 +47,15 @@ namespace clinic.Controllers.Auth
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 Pid = request.Pid,
-                VerificationToken = CreateRandomToken()
+                VerifiedAt = DateTime.Now,
+                IsAdmin = request.IsAdmin,
             };
+
             _dataContext.Users.Add(user);
             await _dataContext.SaveChangesAsync();
 
-            var mailRequest = new MailRequest
-            {
-                ToEmail = user.Email,
-                Subject = "Email verification",
-                Body = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}/verify?token={user.VerificationToken}"
-
-             };
-            await _mailService.SendEmailAsync(mailRequest);
             return Ok();
         }
-
         private void CreatePasswordHash(string password, out byte [] passwordHash, out byte [] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -77,13 +64,5 @@ namespace clinic.Controllers.Auth
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
-
-        public string CreateRandomToken()
-        {
-            byte [] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
-            byte [] key = Guid.NewGuid().ToByteArray();
-            string token = Convert.ToBase64String(time.Concat(key).ToArray());
-            return token;
     }
-}
 }

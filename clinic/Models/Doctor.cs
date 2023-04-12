@@ -1,7 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace clinic.Models
 {
+    [Index(nameof(Email), IsUnique = true)]
+    [Index(nameof(Pid), IsUnique = true)]
     public class Doctor
     {
         public int Id { get; set; }

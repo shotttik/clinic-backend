@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 
 namespace clinic.Controllers.Auth
 {
+    [Route("/[controller]")]
+    [ApiController]
     public class VerificationController :Controller
     {
         private readonly DataContext _dataContext;
