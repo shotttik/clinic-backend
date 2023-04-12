@@ -16,8 +16,21 @@ namespace clinic.Controllers.Auth
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginUser(UserLoginRequest request)
+        public async Task<IActionResult> LoginUser([FromBody] UserLoginRequest request)
         {
+
+            if (!ModelState.IsValid)
+            {
+                var errors = new List<string>();
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        errors.Add(error.ErrorMessage);
+                    }
+                }
+                return BadRequest(errors);
+            }
             var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
             if (user == null)
             {
@@ -32,7 +45,7 @@ namespace clinic.Controllers.Auth
                 return BadRequest("პაროლი არასწორია.");
             }
             string token = Token.CreateToken(user.Email, user.Pid, user.IsAdmin);
-            return Ok(token);
+            return Ok(new { token = token });
         }
 
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)

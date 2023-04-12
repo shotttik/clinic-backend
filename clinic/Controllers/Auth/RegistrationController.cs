@@ -3,6 +3,7 @@ using AutoMapper;
 using clinic.Models;
 using clinic.Schemas;
 using clinic.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
@@ -21,11 +22,23 @@ namespace clinic.Controllers.Auth
         }
        
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser(UserRegisterRequest request)
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest request)
         {
-            if(_dataContext.Users.Any(u=>u.Email == request.Email || u.Pid == request.Pid))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("User already exists.");
+                var errors = new List<string>();
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        errors.Add(error.ErrorMessage);
+                    }
+                }
+                return BadRequest(errors);
+            }
+            if (_dataContext.Users.Any(u=>u.Email == request.Email || u.Pid == request.Pid))
+            {
+                return BadRequest("მომხმარებელი უკვე რეგისტრირებულია.");
             }
 
             CreatePasswordHash(request.Password, out byte [] passwordHash, out byte [] passwordSalt);
@@ -50,7 +63,7 @@ namespace clinic.Controllers.Auth
 
              };
             await _mailService.SendEmailAsync(mailRequest);
-            return Ok("გთხოვთ შეამოწმოთ მეილი, და გადახვიდეთ აქტივაციის ბმულზე!");
+            return Ok();
         }
 
         private void CreatePasswordHash(string password, out byte [] passwordHash, out byte [] passwordSalt)
