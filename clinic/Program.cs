@@ -52,9 +52,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("IsAdmin", policy =>
+    options.AddPolicy("Admin", policy =>
     {
-        policy.RequireRole("1");
         policy.RequireClaim("IsAdmin", "True");
         policy.Build();
     }

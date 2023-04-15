@@ -7,11 +7,13 @@ namespace clinic.Controllers.Auth
     public class Token
     {
 
-        public static string CreateToken(string Email, string Pid,bool IsAdmin )
+        public static string CreateToken(string Email, string Pid,bool IsAdmin, string FirstName, string LastName )
         {
 
             List<Claim> claims = new List<Claim>
             {
+                new Claim("FirstName", FirstName),
+                new Claim("LastName", LastName),
                 new Claim("Email", Email),
                 new Claim("Pid", Pid),
                 new Claim("IsAdmin", IsAdmin.ToString()),

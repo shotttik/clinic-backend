@@ -12,8 +12,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace clinic.Controllers.Auth
 {
-    [Route("/[controller]")]
-    [ApiController]
+    
     public class RegistrationController :Controller
     {
         private readonly IMailService _mailService;

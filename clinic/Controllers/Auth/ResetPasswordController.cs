@@ -7,7 +7,6 @@ using WebApplication1.Data;
 
 namespace clinic.Controllers.Auth
 {
-    [Route("/[controller]")]
     [ApiController]
     public class ResetPasswordController :Controller
     {

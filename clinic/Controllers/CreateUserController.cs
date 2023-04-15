@@ -8,9 +8,8 @@ using WebApplication1.Data;
 
 namespace clinic.Controllers
 {
-    [Route("/[controller]")]
     [ApiController]
-    [Authorize(Policy = "IsAdmin")]
+    [Authorize(Policy = "Admin")]
     public class CreateUserController : Controller
     {
         private readonly DataContext _dataContext;
@@ -36,7 +35,7 @@ namespace clinic.Controllers
             }
             if (await _dataContext.Users.AnyAsync(u => u.Email == request.Email || u.Pid == request.Pid))
             {
-                return BadRequest("ექიმი უკვე რეგისტრირებულია.");
+                return BadRequest("მომხმარებელი უკვე რეგისტრირებულია.");
             }
             CreatePasswordHash(request.Password, out byte [] passwordHash, out byte [] passwordSalt);
             var user = new User

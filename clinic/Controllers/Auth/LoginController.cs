@@ -8,7 +8,6 @@ using WebApplication1.Data;
 
 namespace clinic.Controllers.Auth
 {
-    [Route("/[controller]")]
     [ApiController]
     public class LoginController :Controller
     {
@@ -47,7 +46,7 @@ namespace clinic.Controllers.Auth
             {
                 return BadRequest("პაროლი არასწორია.");
             }
-            string token = Token.CreateToken(user.Email, user.Pid, user.IsAdmin);
+            string token = Token.CreateToken(user.Email, user.Pid, user.IsAdmin, user.FirstName, user.LastName);
             return Ok(new { token = token });
         }
 

@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace clinic.Controllers
 {
-    [Route("/[controller]")]
-    [ApiController]
+   
     [Authorize(Policy = "IsAdmin")]
     public class CreateDoctorController :Controller
     {
