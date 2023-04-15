@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using clinic.Models;
-
 namespace clinic.Schemas
 {
     public class CreateDoctorRequest
@@ -18,12 +17,11 @@ namespace clinic.Schemas
         [StringLength(11, MinimumLength = 11, ErrorMessage = "უნდა შეიცავდეს 11 რიცხვს")]
         [RegularExpression(@"^\d+$")]
         public string Pid { get; set; }
-        [AllowNull]
-        public IFormFile Image { get; set; }
-        [AllowNull]
-        public IFormFile Document { get; set; }
-        [AllowNull]
+        public string? Image { get; set; } = null;
+        public string? Document { get; set; } = null;
         public int CategoryId { get; set; }
         
     }
+
+  
 }

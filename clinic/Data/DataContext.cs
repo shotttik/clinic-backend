@@ -19,11 +19,11 @@ namespace WebApplication1.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Doctor>()
-                .HasOne(d => d.Category)
-                .WithMany(c => c.Doctors)
-                .HasForeignKey(d => d.CategoryId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
+            .HasOne(d => d.Category)
+            .WithMany(c => c.Doctors)
+            .HasForeignKey(d => d.CategoryId);
+            
+           
         }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Category> Categories { get; set; }

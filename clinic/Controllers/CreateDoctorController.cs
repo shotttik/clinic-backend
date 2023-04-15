@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace clinic.Controllers
 {
    
-    [Authorize(Policy = "IsAdmin")]
     public class CreateDoctorController :Controller
     {
         private readonly DataContext _dataContext;
@@ -36,24 +35,23 @@ namespace clinic.Controllers
             {
                 return BadRequest("ექიმი უკვე რეგისტრირებულია.");
             }
+
+            var category = await _dataContext.Categories.FindAsync(request.CategoryId);
+            if (category == null)
+            {
+                return NotFound("კატეგორია ვერ მოიძებნა");
+            }
             var doctor = new Doctor
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
                 Pid = request.Pid,
-                CategoryId = request.CategoryId,
+                Category = category,
+                Image = request.Image,
+                Document = request.Document
+
             };
-            if (request.Image != null)
-            {
-                var imagePath = await Upload(request.Image);
-                doctor.Image = imagePath;
-            }
-            if (request.Document != null)
-            {
-                var documentPath = await Upload(request.Image);
-                doctor.Document = documentPath;
-            }
             await _dataContext.Doctors.AddAsync(doctor);
             await _dataContext.SaveChangesAsync();
 
@@ -61,38 +59,7 @@ namespace clinic.Controllers
             return Ok();
         }
 
-        public async Task<string> Upload(IFormFile file)
-        {
-            
-            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            var folderName = "";
-            var IsImage = false;
-            if (fileName.EndsWith(".pdf"))
-            {
-                folderName = Path.Combine("Resources", "Documents");
-            }
-            else
-            {
-                folderName = Path.Combine("Resources", "Images");
-                IsImage = true;
-            }
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
-            var dbPath = Path.Combine(folderName, fileName);
-            var fullPath = Path.Combine(pathToSave, fileName);
-            using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-            }
-            if (IsImage)
-            {
-                string [] paths = { Directory.GetCurrentDirectory(), folderName, "Thumbnails", fileName };
-                dbPath = Path.Combine(paths.Skip(1).ToArray());
-                var thumbPath = Path.Combine(paths);
-                Utils.GenerateThumbnail(fullPath, thumbPath);
-            }
-            return dbPath;
-        }
+      
     }
 }
 

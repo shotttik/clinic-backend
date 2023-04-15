@@ -7,15 +7,23 @@ appsettings.json
 
 Migrations/
 
-clinic/Resources/*.jpg
-clinic/Resources/*.jpeg 
-clinic/Resources/*.jfif 
-clinic/Resources/*.pjpeg 
-clinic/Resources/*.pjp 
-clinic/Resources/*.png 
-clinic/Resources/*.svg 
-clinic/Resources/*.webp
-clinic/Resources/*.pdf
+clinic/Resources/Images/*.jpg
+clinic/Resources/Images/*.jpeg 
+clinic/Resources/Images/*.jfif 
+clinic/Resources/Images/*.pjpeg 
+clinic/Resources/Images/*.pjp 
+clinic/Resources/Images/*.png 
+clinic/Resources/Images/*.svg 
+clinic/Resources/Images/*.webp
+clinic/Resources/Images/Thumbnails/*.jpg
+clinic/Resources/Images/Thumbnails/*.jpeg 
+clinic/Resources/Images/Thumbnails/*.jfif 
+clinic/Resources/Images/Thumbnails/*.pjpeg 
+clinic/Resources/Images/Thumbnails/*.pjp 
+clinic/Resources/Images/Thumbnails/*.png 
+clinic/Resources/Images/Thumbnails/*.svg 
+clinic/Resources/Images/Thumbnails/*.webp
+clinic/Resources/Documents/*.pdf
 
 bin/
 # User-specific files

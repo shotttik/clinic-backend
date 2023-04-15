@@ -13,8 +13,8 @@ namespace clinic.Models
         public string Email { get; set; }
         public int Views { get; set; } = 0;
         public string Pid { get; set; }
-        public string Image { get; set; }
-        public string Document { get; set; }
+        public string? Image { get; set; } = null;
+        public string? Document { get; set; } = null;
         public int? CategoryId { get; set; }
         public Category Category { get; set; }
     }
