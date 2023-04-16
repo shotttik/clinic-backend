@@ -8,7 +8,6 @@ using WebApplication1.Data;
 
 namespace clinic.Controllers
 {
-    [ApiController]
     [Authorize(Policy = "Admin")]
     public class CreateUserController : Controller
     {

@@ -15,6 +15,8 @@ namespace WebApplication1.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<CodeVerification> CodeVerifications { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,8 +27,6 @@ namespace WebApplication1.Data
             
            
         }
-        public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<Category> Categories { get; set; }
     }
 
 }

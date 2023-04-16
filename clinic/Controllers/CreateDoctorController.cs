@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace clinic.Controllers
 {
-   
+
+    [Authorize(Policy = "Admin")]
     public class CreateDoctorController :Controller
     {
         private readonly DataContext _dataContext;
