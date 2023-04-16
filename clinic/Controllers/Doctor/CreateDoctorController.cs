@@ -6,14 +6,14 @@ using clinic.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
-namespace clinic.Controllers
+namespace clinic.Controllers.Doctor
 {
 
     [Authorize(Policy = "Admin")]
-    public class CreateDoctorController :Controller
+    public class CreateDoctorController : Controller
     {
         private readonly DataContext _dataContext;
-        public CreateDoctorController (DataContext dataContext)
+        public CreateDoctorController(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
@@ -42,7 +42,7 @@ namespace clinic.Controllers
             {
                 return NotFound("კატეგორია ვერ მოიძებნა");
             }
-            var doctor = new Doctor
+            var doctor = new Models.Doctor
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
@@ -60,7 +60,7 @@ namespace clinic.Controllers
             return Ok();
         }
 
-      
+
     }
 }
 

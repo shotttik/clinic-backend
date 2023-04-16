@@ -6,10 +6,10 @@ using WebApplication1.Data;
 namespace clinic.Controllers.Category
 {
     [Authorize(Policy = "Admin")]
-    public class DeleteCategory :Controller
+    public class DeleteCategoryController :Controller
     {
         private readonly DataContext _dataContext;
-        public DeleteCategory(DataContext dataContext)
+        public DeleteCategoryController(DataContext dataContext)
         {
             _dataContext = dataContext;
         }

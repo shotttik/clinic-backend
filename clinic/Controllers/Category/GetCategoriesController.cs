@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
+using Microsoft.IdentityModel.Tokens;
 
 namespace clinic.Controllers.Category
 {
@@ -19,7 +20,7 @@ namespace clinic.Controllers.Category
             if (!withDoctors)
             {
                 var categoriesOnly = await _dataContext.Categories.ToListAsync();
-                if (categoriesOnly == null) return NotFound();
+                if (categoriesOnly.IsNullOrEmpty()) return NotFound();
                 return Ok(categoriesOnly);
             }
             var options = new JsonSerializerOptions
