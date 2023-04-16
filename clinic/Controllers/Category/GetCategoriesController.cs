@@ -27,7 +27,13 @@ namespace clinic.Controllers.Category
                 ReferenceHandler = ReferenceHandler.Preserve
             };
 
-            var categoriesWithDoctors = JsonSerializer.Serialize(await _dataContext.Categories.Include(c => c.Doctors ).ToListAsync(), options);
+            var categoriesWithDoctors = JsonSerializer.Serialize(await _dataContext.Categories.Include(c => c.Doctors).Select(c=> new
+            {   
+                id = c.Id,
+                name = c.Name,
+                doctorsCount = c.Doctors.Count(),
+
+            }).ToListAsync(), options);
 
 
             if (categoriesWithDoctors == null) return NotFound();
