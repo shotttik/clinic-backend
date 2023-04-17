@@ -12,6 +12,36 @@ namespace clinic.Controllers.Doctor
         {
             _dataContext = dataContext;
         }
+        [HttpGet("getDoctors")]
+        public async Task<IActionResult> GetDoctors()
+        {
+            var doctors = await _dataContext.Doctors
+            .Include(c => c.Category)
+            .Select(d => new
+            {
+                d.Id,
+                d.FirstName,
+                d.LastName,
+                d.Email,
+                d.Pid,
+                d.Views,
+                d.Image,
+                d.Document,
+                category= new
+                {
+                d.Category.Id,
+                d.Category.Name,
+                },
+            })
+            .ToListAsync();
+            if (doctors.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+
+
+            return Ok(doctors);
+        }
         [HttpGet("getDoctor/{id}")]
         public async Task<IActionResult> GetDoctor(int id)
         {

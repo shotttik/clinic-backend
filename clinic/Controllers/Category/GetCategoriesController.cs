@@ -23,18 +23,15 @@ namespace clinic.Controllers.Category
                 if (categoriesOnly.IsNullOrEmpty()) return NotFound();
                 return Ok(categoriesOnly);
             }
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve
-            };
+            
 
-            var categoriesWithDoctors = JsonSerializer.Serialize(await _dataContext.Categories.Include(c => c.Doctors).Select(c=> new
+            var categoriesWithDoctors = await _dataContext.Categories.Include(c => c.Doctors).Select(c=> new
             {   
                 id = c.Id,
                 name = c.Name,
                 doctorsCount = c.Doctors.Count(),
 
-            }).ToListAsync(), options);
+            }).ToListAsync();
 
 
             if (categoriesWithDoctors == null) return NotFound();
