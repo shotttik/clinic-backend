@@ -59,7 +59,24 @@ namespace clinic.Controllers.Doctor
         [HttpGet("getDoctors/category/{id}")]
         public async Task<IActionResult> GetDoctorsByCategory(int id)
         {
-            var doctors = await _dataContext.Doctors.Where(d=> d.CategoryId == id).ToListAsync();
+            var doctors = await _dataContext.Doctors.Where(d=> d.CategoryId == id).Include(c => c.Category)
+            .Select(d => new
+            {
+                d.Id,
+                d.FirstName,
+                d.LastName,
+                d.Email,
+                d.Pid,
+                d.Views,
+                d.Image,
+                d.Document,
+                category = new
+                {
+                    d.Category.Id,
+                    d.Category.Name,
+                },
+            })
+            .ToListAsync();
             if (doctors.IsNullOrEmpty())
             {
                 return NotFound();
@@ -67,5 +84,6 @@ namespace clinic.Controllers.Doctor
 
             return Ok(doctors);
         }
+
     }
 }

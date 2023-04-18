@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using clinic.Schemas;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Data;
@@ -12,30 +13,72 @@ namespace clinic.Controllers.Doctor
         {
             _dataContext = dataContext;
         }
-        [HttpPost("searchDoctor")]
-        public async Task<IActionResult> SearchDoctor(string byName = null, string byCategory = null)
+        [HttpPost("search")]
+        public async Task<IActionResult> SearchDoctor([FromBody] SearchRequest request)
         {
-            if (byName != null && byCategory == null)
+            if (request.byName != null && request.byCategory == null)
             {
                 var doctorsByName = await _dataContext.Doctors.Where(
-                    d => EF.Functions.FreeText(d.FirstName, byName) || EF.Functions.FreeText(d.LastName, byName) || EF.Functions.FreeText(d.Email , byName)
-                    ).ToListAsync();
+                    d => EF.Functions.Like(d.FirstName  + " "+  d.LastName + " " + d.Email, $"%{request.byName}%")
+                    ).Include(d=> d.Category).Select(d => new {
+                        d.Id,
+                        d.FirstName,
+                        d.LastName,
+                        d.Email,
+                        d.Pid,
+                        d.Views,
+                        d.Image,
+                        d.Document,
+                        category = new
+                        {
+                            d.Category.Id,
+                            d.Category.Name,
+                        },
+                    }).ToListAsync();
                 if (doctorsByName.IsNullOrEmpty()) return NotFound("ექიმი ვერ მოიძებნა.");
                 return Ok(doctorsByName);
 
-            }else if (byCategory != null && byName == null)
+            }else if (request.byCategory != null && request.byName == null)
             {
                 var doctorsByCategory = await _dataContext.Doctors.Where(
-                    d => EF.Functions.FreeText(d.Category.Name, byCategory)
-                    ).ToListAsync();
+                    d => EF.Functions.Like(d.Category.Name, $"%{request.byCategory}%")
+                    ).Include(d => d.Category).Select(d => new {
+                        d.Id,
+                        d.FirstName,
+                        d.LastName,
+                        d.Email,
+                        d.Pid,
+                        d.Views,
+                        d.Image,
+                        d.Document,
+                        category = new
+                        {
+                            d.Category.Id,
+                            d.Category.Name,
+                        },
+                    }).ToListAsync(); ;
                 if (doctorsByCategory.IsNullOrEmpty()) return NotFound("ექიმი ვერ მოიძებნა.");
                 return Ok(doctorsByCategory);
 
-            }else if(byName != null && byCategory != null)
+            }else if(request.byName != null && request.byCategory != null)
             {
                 var doctorsByBoth = await _dataContext.Doctors.Where(
-                    d => EF.Functions.FreeText(d.FirstName, byName) || EF.Functions.FreeText(d.LastName, byName) || EF.Functions.FreeText(d.Email, byName) && EF.Functions.FreeText(d.Category.Name, byCategory)
-                    ).ToListAsync();
+                    d => EF.Functions.Like(d.FirstName + " " + d.LastName + " "+ d.Email, $"%{request.byName}%") && EF.Functions.Like(d.Category.Name, $"%{request.byCategory}%")
+                    ).Include(d => d.Category).Select(d => new {
+                        d.Id,
+                        d.FirstName,
+                        d.LastName,
+                        d.Email,
+                        d.Pid,
+                        d.Views,
+                        d.Image,
+                        d.Document,
+                        category = new
+                        {
+                            d.Category.Id,
+                            d.Category.Name,
+                        },
+                    }).ToListAsync(); ;
                  if(doctorsByBoth.IsNullOrEmpty()) return NotFound("ექიმი ვერ მოიძებნა.");
                 return Ok(doctorsByBoth);
 

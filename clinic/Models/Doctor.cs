@@ -1,7 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.OpenApi.Any;
 
 namespace clinic.Models
 {
@@ -19,5 +22,6 @@ namespace clinic.Models
         public string? Document { get; set; } = null;
         public int? CategoryId { get; set; }
         public Category Category { get; set; }
+
     }
 }
