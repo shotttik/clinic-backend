@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json.Serialization;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Data;
@@ -53,8 +55,27 @@ namespace clinic.Controllers.Doctor
 
             doctor.Views += 1;
             await _dataContext.SaveChangesAsync();
-
-            return Ok(doctor);
+            var category = await _dataContext.Categories.FindAsync(doctor.CategoryId);
+            if (category == null)
+            {
+                return NotFound("ექიმს კატეგორია არაქვს");
+            }
+            return Ok(new
+            {
+                doctor.Id,
+                doctor.FirstName,
+                doctor.LastName,
+                doctor.Email,
+                doctor.Pid,
+                doctor.Views,
+                doctor.Image,
+                doctor.Document,
+                category = new
+                {
+                    category.Id,
+                    category.Name,
+                },
+            });
         }
         [HttpGet("getDoctors/category/{id}")]
         public async Task<IActionResult> GetDoctorsByCategory(int id)

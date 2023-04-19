@@ -24,9 +24,10 @@ namespace WebApplication1.Data
             .HasOne(d => d.Category)
             .WithMany(c => c.Doctors)
             .HasForeignKey(d => d.CategoryId);
-            
-           
+
+
         }
+
     }
 
 }
