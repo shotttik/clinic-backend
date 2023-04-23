@@ -1,4 +1,4 @@
-﻿using clinic.Schemas;
+﻿using clinic.Schemas.Auth;
 
 namespace clinic.Services
 {

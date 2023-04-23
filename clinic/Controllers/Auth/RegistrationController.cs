@@ -2,6 +2,7 @@
 using AutoMapper;
 using clinic.Models;
 using clinic.Schemas;
+using clinic.Schemas.Auth;
 using clinic.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -12,7 +13,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace clinic.Controllers.Auth
 {
-    
+
     public class RegistrationController :Controller
     {
         private readonly IMailService _mailService;

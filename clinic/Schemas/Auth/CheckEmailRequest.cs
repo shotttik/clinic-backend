@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace clinic.Schemas
+namespace clinic.Schemas.Auth
 {
     public class CheckEmailRequest
     {

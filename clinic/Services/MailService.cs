@@ -1,4 +1,4 @@
-﻿using clinic.Schemas;
+﻿using clinic.Schemas.Auth;
 using clinic.Settings;
 using MailKit.Net.Smtp;
 using MailKit.Security;

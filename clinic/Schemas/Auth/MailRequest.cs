@@ -1,4 +1,4 @@
-﻿namespace clinic.Schemas
+﻿namespace clinic.Schemas.Auth
 {
     public class MailRequest
     {

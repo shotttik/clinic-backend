@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using clinic.Models;
+using clinic.Schemas.Auth;
 
 namespace clinic.Schemas
 {

@@ -1,5 +1,6 @@
 ﻿using clinic.Models;
 using clinic.Schemas;
+using clinic.Schemas.Auth;
 using clinic.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;

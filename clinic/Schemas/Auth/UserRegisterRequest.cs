@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace clinic.Schemas
+namespace clinic.Schemas.Auth
 {
     public class UserRegisterRequest
     {
@@ -10,7 +10,7 @@ namespace clinic.Schemas
         [Required]
         public string LastName { get; set; }
         [Required]
-        [EmailAddress(ErrorMessage ="არა სწორი მეილის ფორმატი")]
+        [EmailAddress(ErrorMessage = "არა სწორი მეილის ფორმატი")]
         public string Email { get; set; }
 
         [Required, StringLength(255, MinimumLength = 8)]

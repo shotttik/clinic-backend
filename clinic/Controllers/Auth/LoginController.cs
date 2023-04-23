@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 using clinic.Models;
-using clinic.Schemas;
+using clinic.Schemas.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
