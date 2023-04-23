@@ -23,7 +23,7 @@ namespace clinic.Controllers.Category
             {
                 return NotFound();
             }
-            var doctor = await _dataContext.Doctors.FirstOrDefaultAsync(x => x.CategoryId == id);
+            var doctor = await _dataContext.Users.FirstOrDefaultAsync(x => x.CategoryId == id);
             if (doctor != null)
             {
                 return Conflict("წაშლა შეუძლებელია, რადგან ექიმი ამ კატეგორიით არსებობს.");

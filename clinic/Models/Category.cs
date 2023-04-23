@@ -10,7 +10,7 @@ namespace clinic.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Doctor> Doctors { get; set; }
+        public ICollection<User> Users { get; set; }
 
     }
 }

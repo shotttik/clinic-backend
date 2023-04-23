@@ -5,11 +5,12 @@ using System.Net.Http.Headers;
 using clinic.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
 
 namespace clinic.Controllers.Doctor
 {
 
-    [Authorize(Policy = "Admin")]
+    /*[Authorize(Policy = "Admin")]*/
     public class CreateDoctorController : Controller
     {
         private readonly DataContext _dataContext;
@@ -32,7 +33,7 @@ namespace clinic.Controllers.Doctor
                 }
                 return BadRequest(errors);
             }
-            if (await _dataContext.Doctors.AnyAsync(d => d.Email == request.Email || d.Pid == request.Pid))
+            if (await _dataContext.Users.AnyAsync(d => d.Email == request.Email || d.Pid == request.Pid))
             {
                 return BadRequest("ექიმი უკვე რეგისტრირებულია.");
             }
@@ -42,7 +43,9 @@ namespace clinic.Controllers.Doctor
             {
                 return NotFound("კატეგორია ვერ მოიძებნა");
             }
-            var doctor = new Models.Doctor
+            CreatePasswordHash(request.Password, out byte [] passwordHash, out byte [] passwordSalt);
+
+            var doctor = new User
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
@@ -50,14 +53,26 @@ namespace clinic.Controllers.Doctor
                 Pid = request.Pid,
                 Category = category,
                 Image = request.Image,
-                Document = request.Document
+                Document = request.Document,
+                Role = UserRole.Doctor,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                VerifiedAt = DateTime.Now
 
             };
-            await _dataContext.Doctors.AddAsync(doctor);
+            await _dataContext.Users.AddAsync(doctor);
             await _dataContext.SaveChangesAsync();
 
 
             return Ok();
+        }
+        private void CreatePasswordHash(string password, out byte [] passwordHash, out byte [] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
         }
 
 

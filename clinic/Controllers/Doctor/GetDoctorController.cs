@@ -4,20 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Data;
+using clinic.Models;
 
 namespace clinic.Controllers.Doctor
 {
     public class GetDoctorController :Controller
     {
         private readonly DataContext _dataContext;
-        public GetDoctorController (DataContext dataContext)
+        public GetDoctorController(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
         [HttpGet("getDoctors")]
         public async Task<IActionResult> GetDoctors()
         {
-            var doctors = await _dataContext.Doctors
+            var doctors = await _dataContext.Users.Where(u=>u.Role == UserRole.Doctor)
             .Include(c => c.Category)
             .Select(d => new
             {
@@ -29,10 +30,10 @@ namespace clinic.Controllers.Doctor
                 d.Views,
                 d.Image,
                 d.Document,
-                category= new
+                category = new
                 {
-                d.Category.Id,
-                d.Category.Name,
+                    d.Category.Id,
+                    d.Category.Name,
                 },
             })
             .ToListAsync();
@@ -47,7 +48,7 @@ namespace clinic.Controllers.Doctor
         [HttpGet("getDoctor/{id}")]
         public async Task<IActionResult> GetDoctor(int id)
         {
-            var doctor = await _dataContext.Doctors.FindAsync(id);
+            var doctor = await _dataContext.Users.FindAsync(id);
             if (doctor == null)
             {
                 return NotFound();
@@ -80,7 +81,7 @@ namespace clinic.Controllers.Doctor
         [HttpGet("getDoctors/category/{id}")]
         public async Task<IActionResult> GetDoctorsByCategory(int id)
         {
-            var doctors = await _dataContext.Doctors.Where(d=> d.CategoryId == id).Include(c => c.Category)
+            var doctors = await _dataContext.Users.Where(d =>d.Role == UserRole.Doctor  && d.CategoryId == id).Include(c => c.Category)
             .Select(d => new
             {
                 d.Id,

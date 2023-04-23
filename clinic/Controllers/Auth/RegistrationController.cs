@@ -52,7 +52,8 @@ namespace clinic.Controllers.Auth
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 Pid = request.Pid,
-                VerificationToken = CreateRandomToken()
+                VerificationToken = CreateRandomToken(),
+                Role = UserRole.User
             };
             _dataContext.Users.Add(user);
             await _dataContext.SaveChangesAsync();

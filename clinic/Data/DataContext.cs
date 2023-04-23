@@ -15,14 +15,13 @@ namespace WebApplication1.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<CodeVerification> CodeVerifications { get; set; }
-        public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Doctor>()
+            modelBuilder.Entity<User>()
             .HasOne(d => d.Category)
-            .WithMany(c => c.Doctors)
+            .WithMany(c => c.Users)
             .HasForeignKey(d => d.CategoryId);
 
 

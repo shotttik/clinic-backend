@@ -4,18 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using Microsoft.IdentityModel.Tokens;
+using clinic.Models;
 
 namespace clinic.Controllers.Category
 {
     public class GetCategoriesController :Controller
     {
         private readonly DataContext _dataContext;
-        public GetCategoriesController (DataContext dataContext)
+        public GetCategoriesController(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
         [HttpGet("categories")]
-        public async Task<IActionResult> GetCategories(bool withDoctors=false)
+        public async Task<IActionResult> GetCategories(bool withDoctors = false)
         {
             if (!withDoctors)
             {
@@ -23,13 +24,13 @@ namespace clinic.Controllers.Category
                 if (categoriesOnly.IsNullOrEmpty()) return NotFound();
                 return Ok(categoriesOnly);
             }
-            
 
-            var categoriesWithDoctors = await _dataContext.Categories.Include(c => c.Doctors).Select(c=> new
-            {   
+
+            var categoriesWithDoctors = await _dataContext.Categories.Include(c => c.Users.Where(u=> u.Role == UserRole.Doctor)).Select(c => new
+            {
                 id = c.Id,
                 name = c.Name,
-                doctorsCount = c.Doctors.Count(),
+                doctorsCount = c.Users.Count(),
 
             }).ToListAsync();
 

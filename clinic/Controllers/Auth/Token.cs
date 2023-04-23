@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using clinic.Models;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -7,7 +8,7 @@ namespace clinic.Controllers.Auth
     public class Token
     {
 
-        public static string CreateToken(string Email, string Pid,bool IsAdmin, string FirstName, string LastName )
+        public static string CreateToken(string Email, string Pid, UserRole Role, string FirstName, string LastName, string Category)
         {
 
             List<Claim> claims = new List<Claim>
@@ -16,8 +17,8 @@ namespace clinic.Controllers.Auth
                 new Claim("LastName", LastName),
                 new Claim("Email", Email),
                 new Claim("Pid", Pid),
-                new Claim("IsAdmin", IsAdmin.ToString()),
-
+                new Claim("Role", Role.ToString()),
+                new Claim("Category", Category),
 
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

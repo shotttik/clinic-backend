@@ -46,7 +46,7 @@ namespace clinic.Controllers
                 PasswordSalt = passwordSalt,
                 Pid = request.Pid,
                 VerifiedAt = DateTime.Now,
-                IsAdmin = request.IsAdmin,
+                Role = request.Role,
             };
 
             _dataContext.Users.Add(user);
