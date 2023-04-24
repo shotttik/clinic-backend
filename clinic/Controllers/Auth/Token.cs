@@ -8,11 +8,12 @@ namespace clinic.Controllers.Auth
     public class Token
     {
 
-        public static string CreateToken(string Email, string Pid, UserRole Role, string FirstName, string LastName, string Category)
+        public static string CreateToken(int Id,string Email, string Pid, UserRole Role, string FirstName, string LastName, string Category)
         {
 
             List<Claim> claims = new List<Claim>
             {
+                new Claim("Id", Id.ToString()),
                 new Claim("FirstName", FirstName),
                 new Claim("LastName", LastName),
                 new Claim("Email", Email),

@@ -7,9 +7,9 @@ namespace clinic.Schemas.reservation
         [Required]
         public string Title { get; set; }
         [Required]
-        public string StartDate { get; set; }
+        public string Start { get; set; }
         [Required]
-        public string EndDate { get; set; }
+        public string End { get; set; }
         public int? UserId { get; set; }
         [Required]
         public int DoctorId { get; set; }

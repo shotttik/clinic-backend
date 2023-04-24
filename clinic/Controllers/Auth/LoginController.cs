@@ -52,7 +52,7 @@ namespace clinic.Controllers.Auth
             var category = await _dataContext.Categories.FindAsync(user.CategoryId);
             if(category != null) categoryName = category.Name;
             }
-            string token = Token.CreateToken(user.Email, user.Pid, user.Role, user.FirstName, user.LastName, categoryName);
+            string token = Token.CreateToken(user.Id,user.Email, user.Pid, user.Role, user.FirstName, user.LastName, categoryName);
             return Ok(new { token = token });
         }
 
