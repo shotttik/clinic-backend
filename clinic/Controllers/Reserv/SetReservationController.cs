@@ -36,14 +36,16 @@ namespace clinic.Controllers.Reserv
             if (doctor == null) return BadRequest("ექიმი არ არსებობს");
             DateTime startDate = DateTime.ParseExact(request.Start, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(request.End, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
-            int searchId = (int)(request.UserId == null ? request.DoctorId : request.UserId);
-            var exists = await _dataContext.Reservations.Where(r =>
-            r.UserId == searchId && (
-            startDate > r.StartDate &&
-            startDate < r.EndDate ||
-            endDate > r.StartDate &&
-            endDate < r.EndDate)).ToListAsync();
-            if (!exists.IsNullOrEmpty()) return BadRequest("ამ დროს ჯავშანი უკვე გაკეთებულია.");
+            if (request.UserId != null)
+            {
+                var exists = await _dataContext.Reservations.Where(r =>
+                r.UserId == request.UserId && !(
+                endDate <= r.StartDate || startDate >= r.EndDate
+
+                )).ToListAsync();
+                if (!exists.IsNullOrEmpty()) return BadRequest("ამ დროს ჯავშანი უკვე გაკეთებულია.");
+
+            }
             var reservation = new Reservation
             {
                 Title = request.Title,

@@ -8,7 +8,7 @@ namespace clinic.Controllers.Auth
     public class Token
     {
 
-        public static string CreateToken(int Id,string Email, string Pid, UserRole Role, string FirstName, string LastName, string Category)
+        public static string CreateToken(int Id,string Email, string Pid, UserRole Role, string FirstName, string LastName, string Category, string Image)
         {
 
             List<Claim> claims = new List<Claim>
@@ -20,6 +20,7 @@ namespace clinic.Controllers.Auth
                 new Claim("Pid", Pid),
                 new Claim("Role", Role.ToString()),
                 new Claim("Category", Category),
+                new Claim("Image", Image),
 
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
