@@ -7,6 +7,9 @@
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int? UserId { get; set; }
+        public string? UserFullName { get; set; }
         public int DoctorId { get; set; }
+        public string? DoctorFullName { get; set; }
+
     }
 }

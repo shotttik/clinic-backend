@@ -52,12 +52,14 @@ namespace clinic.Controllers.Reserv
                 StartDate = startDate,
                 EndDate = endDate,
                 DoctorId = doctor.Id,
+                DoctorFullName = doctor.FirstName + " " + doctor.LastName
             };
             if (request.UserId != null)
             {
                 var user = await _dataContext.Users.FindAsync(request.UserId);
                 if (user == null) return BadRequest("მომხმარებელი არ არსებობს");
                 reservation.UserId = user.Id;
+                reservation.UserFullName = user.FirstName + " " + user.LastName;
             }
 
             await _dataContext.Reservations.AddAsync(reservation);

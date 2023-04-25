@@ -53,7 +53,18 @@ namespace clinic.Controllers.Auth
             if(category != null) categoryName = category.Name;
             }
             var imgPath = user.Image == null ? "" : user.Image;
-            string token = Token.CreateToken(user.Id,user.Email, user.Pid, user.Role, user.FirstName, user.LastName, categoryName, imgPath);
+
+            int rCount = 0;
+            if(user.Role == UserRole.Doctor)
+            {
+                rCount = await _dataContext.Reservations.Where(r => r.DoctorId == user.Id && r.UserId != null).CountAsync();
+            }
+            else
+            {
+                rCount = await _dataContext.Reservations.Where(r => r.UserId == user.Id).CountAsync();
+            }
+            
+            string token = Token.CreateToken(user.Id,user.Email, user.Pid, user.Role, user.FirstName, user.LastName, categoryName, imgPath, rCount.ToString());
             return Ok(new { token = token });
         }
 
